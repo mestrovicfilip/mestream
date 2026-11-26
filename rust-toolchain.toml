@@ -1,0 +1,5 @@
+# The exact Rust version Mestream is built and checked with, so a build today
+# and a build next year behave the same. Raise it deliberately.
+[toolchain]
+channel = "1.97.0"
+components = ["clippy"]

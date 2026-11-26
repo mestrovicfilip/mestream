@@ -1,0 +1,51 @@
+name: Release
+
+# Pushing a tag like v0.2.0 builds the program from that exact source and
+# publishes it with the matching section of CHANGELOG.md as the notes.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      # Installs the Rust version named in rust-toolchain.toml.
+      - name: Install Rust
+        run: rustup show
+      - name: Check that the tag matches the version in Cargo.toml
+        shell: pwsh
+        run: |
+          $version = (Select-String -Path Cargo.toml -Pattern '^version = "(.+)"').Matches[0].Groups[1].Value
+          if ("v$version" -ne $env:GITHUB_REF_NAME) {
+            throw "tag $env:GITHUB_REF_NAME does not match version $version in Cargo.toml"
+          }
+      - name: Test
+        run: cargo test --locked
+      - name: Build and package
+        shell: pwsh
+        run: ./assets/package.ps1
+      - name: Publish
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = $env:GITHUB_REF_NAME.TrimStart('v')
+          $zip = "dist/Mestream-$version-windows-x64.zip"
+          $hash = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLower()
+          "$hash  Mestream-$version-windows-x64.zip" | Out-File -Encoding ascii "$zip.sha256"
+
+          # The notes are this version's section of the changelog.
+          $section = @()
+          $inside = $false
+          foreach ($line in Get-Content CHANGELOG.md) {
+            if ($line -match '^## ') { $inside = $line -match "^## \[?$([regex]::Escape($version))\]?" ; continue }
+            if ($inside) { $section += $line }
+          }
+          ($section -join "`n").Trim() | Out-File -Encoding utf8 notes.md
+
+          gh release create $env:GITHUB_REF_NAME $zip "$zip.sha256" --title "Mestream $version" --notes-file notes.md

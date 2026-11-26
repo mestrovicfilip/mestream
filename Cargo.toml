@@ -1,0 +1,64 @@
+[package]
+name = "mestream"
+version = "0.2.0"
+edition = "2024"
+authors = ["Filip Meštrović (MestApps) <https://www.mestapps.com>"]
+description = "Low-latency Xbox remote play client for Windows handhelds"
+license = "AGPL-3.0-only"
+repository = "https://github.com/mestrovicfilip/mestream"
+publish = false
+
+[dependencies]
+anyhow = "1"
+bytes = "1"
+cpal = "0.18.2"
+qrcode = { version = "0.14", default-features = false }
+reqwest = { version = "0.13", default-features = false, features = ["native-tls", "json", "form"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "time", "sync", "signal", "fs", "io-util"] }
+opusic-c = "1.6.1"
+uuid = { version = "1", features = ["v4"] }
+webrtc = "0.17"
+windows = { version = "0.62", features = [
+    "Win32_Foundation",
+    "Win32_Graphics_Direct2D",
+    "Win32_Graphics_Direct2D_Common",
+    "Win32_Graphics_Direct3D",
+    "Win32_Graphics_Direct3D11",
+    "Win32_Graphics_Direct3D_Fxc",
+    "Win32_Graphics_DirectWrite",
+    "Win32_Graphics_Dxgi",
+    "Win32_Graphics_Dxgi_Common",
+    "Win32_Graphics_Gdi",
+    "Win32_Media",
+    "Win32_Media_Audio",
+    "Win32_Media_KernelStreaming",
+    "Win32_Media_Multimedia",
+    "Win32_Media_MediaFoundation",
+    "Win32_Security",
+    "Win32_Security_Cryptography",
+    "Win32_System_Com",
+    "Win32_System_Console",
+    "Win32_System_DataExchange",
+    "Win32_System_LibraryLoader",
+    "Win32_System_Memory",
+    "Win32_System_Threading",
+    "Win32_System_Time",
+    "Win32_UI_HiDpi",
+    "Win32_UI_Input_XboxController",
+    "Win32_UI_Shell",
+    "Win32_UI_WindowsAndMessaging",
+] }
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+
+# Keep dependencies (Opus, WebRTC) fast in debug builds too.
+[profile.dev.package."*"]
+opt-level = 3
+
+[build-dependencies]
+winresource = "0.1"

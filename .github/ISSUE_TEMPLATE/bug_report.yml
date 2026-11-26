@@ -1,0 +1,42 @@
+name: Something does not work
+description: The stream fails, stutters, or Mestream misbehaves
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what you got instead.
+    validations:
+      required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: Error report
+      description: >
+        If Mestream showed a failure screen, press "Copy error" there and paste
+        the result here. Network addresses are already removed from it; the
+        name of your console is not, so edit that out if you prefer.
+      render: text
+  - type: input
+    id: version
+    attributes:
+      label: Mestream version
+      placeholder: "0.2.0"
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and console
+      placeholder: "ROG Xbox Ally X, Windows 11 / Xbox Series S"
+    validations:
+      required: true
+  - type: dropdown
+    id: network
+    attributes:
+      label: How is the console connected?
+      options:
+        - Cable
+        - Wi-Fi
+        - Not sure

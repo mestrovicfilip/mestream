@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      # Installs the Rust version named in rust-toolchain.toml.
+      - name: Install Rust
+        run: rustup show
+      - name: Lint
+        run: cargo clippy --locked -- -D warnings
+      - name: Test
+        run: cargo test --locked
