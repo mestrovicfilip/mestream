@@ -126,6 +126,12 @@ The program is `target\release\mestream.exe`. `assets\package.ps1` builds it
 and makes the release zip; `assets\make-shortcut.ps1` puts a shortcut on the
 desktop.
 
+## Contributing
+
+Work happens on `develop`; `main` always holds the latest release. Send pull
+requests against `develop`. A release is made by merging `develop` into
+`main` and tagging the result (`v1.2.3`): the tag builds and publishes it.
+
 ## Translating
 
 All on-screen text lives in `src/text/en.rs`. To add a language, copy that

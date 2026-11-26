@@ -2,6 +2,8 @@ name: Release
 
 # Pushing a tag like v0.2.0 builds the program from that exact source and
 # publishes it with the matching section of CHANGELOG.md as the notes.
+# Only a tag on a commit that is part of main is released: work on develop
+# has to be merged first.
 on:
   push:
     tags: ["v*"]
@@ -14,6 +16,16 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Check that the tagged commit is on main
+        shell: pwsh
+        run: |
+          git fetch origin main
+          git merge-base --is-ancestor $env:GITHUB_SHA origin/main
+          if ($LASTEXITCODE -ne 0) {
+            throw "tag $env:GITHUB_REF_NAME is not on main: merge into main first, then tag there"
+          }
       # Installs the Rust version named in rust-toolchain.toml.
       - name: Install Rust
         run: rustup show
