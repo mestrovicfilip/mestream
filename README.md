@@ -7,6 +7,8 @@ A small, fast Xbox remote play client for Windows handhelds. It streams your
 own Xbox console to your device over your home network, with the least delay
 the hardware allows.
 
+![The settings panel open over the stream](assets/screenshots/settings-picture.png)
+
 Built for and tested on the **ASUS ROG Xbox Ally X**. It should run on the
 other ROG Ally models and on any Windows 11 PC with an Xbox-compatible
 controller, but those have not been tested.
@@ -26,6 +28,14 @@ controller, but those have not been tested.
 - sound that waits only as long as the network requires, typically about 20 ms
 - reconnects by itself after the stream drops or the device wakes from sleep
 - everything on screen works by touch, controller, keyboard and mouse
+
+| Signing in | Choosing a console |
+|---|---|
+| ![Sign-in screen with a code and a QR code](assets/screenshots/sign-in.png) | ![List of consoles to choose from](assets/screenshots/choose-console.png) |
+
+| Stream settings | Device settings | Console actions |
+|---|---|---|
+| ![Resolution, bitrate, display sync and smoothing](assets/screenshots/settings-stream.png) | ![Volume, vibration and statistics](assets/screenshots/settings-device.png) | ![Switch console, restart console, sign out](assets/screenshots/settings-console.png) |
 
 ## Before you start
 
